@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="picosoc_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="picosoc_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1,558.260 ns"></ZoomStartTime>
+      <ZoomEndTime time="3,204.261 ns"></ZoomEndTime>
+      <Cursor1Time time="6,000.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="149"></NameColumnWidth>
+      <ValueColumnWidth column_width="91"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="18" />
+   <wvobject fp_name="/picosoc_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/resetn" type="logic">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/mem_valid" type="logic">
+      <obj_property name="ElementShortName">mem_valid</obj_property>
+      <obj_property name="ObjectShortName">mem_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/mem_ready" type="logic">
+      <obj_property name="ElementShortName">mem_ready</obj_property>
+      <obj_property name="ObjectShortName">mem_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/mem_addr" type="array">
+      <obj_property name="ElementShortName">mem_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/mem_rdata" type="array">
+      <obj_property name="ElementShortName">mem_rdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_rdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/mem_wdata" type="array">
+      <obj_property name="ElementShortName">mem_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_wdata[31:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/dbg_ascii_instr" type="array">
+      <obj_property name="ElementShortName">dbg_ascii_instr[63:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_ascii_instr[63:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/cpu/dbg_ascii_state" type="array">
+      <obj_property name="ElementShortName">dbg_ascii_state[127:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_ascii_state[127:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/ser_rx" type="logic">
+      <obj_property name="ElementShortName">ser_rx</obj_property>
+      <obj_property name="ObjectShortName">ser_rx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/ser_tx" type="logic">
+      <obj_property name="ElementShortName">ser_tx</obj_property>
+      <obj_property name="ObjectShortName">ser_tx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/reg_div_di" type="array">
+      <obj_property name="ElementShortName">reg_div_di[31:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_div_di[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/reg_dat_di" type="array">
+      <obj_property name="ElementShortName">reg_dat_di[31:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_dat_di[31:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/reg_div_do" type="array">
+      <obj_property name="ElementShortName">reg_div_do[31:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_div_do[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/reg_dat_do" type="array">
+      <obj_property name="ElementShortName">reg_dat_do[31:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_dat_do[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/send_pattern" type="array">
+      <obj_property name="ElementShortName">send_pattern[9:0]</obj_property>
+      <obj_property name="ObjectShortName">send_pattern[9:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/send_bitcnt" type="array">
+      <obj_property name="ElementShortName">send_bitcnt[3:0]</obj_property>
+      <obj_property name="ObjectShortName">send_bitcnt[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/picosoc_tb/uut/simpleuart/send_dummy" type="logic">
+      <obj_property name="ElementShortName">send_dummy</obj_property>
+      <obj_property name="ObjectShortName">send_dummy</obj_property>
+   </wvobject>
+</wave_config>

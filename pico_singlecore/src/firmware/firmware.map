@@ -1,0 +1,53 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/firmware.o
+LOAD build/print.o
+LOAD build/start.o
+
+.memory         0x0000000000000000      0x1f8
+                0x0000000000000000                . = 0x0
+ *(.init)
+ .init          0x0000000000000000       0x94 build/start.o
+                0x000000000000008c                esns_nop
+ *(.text)
+ .text          0x0000000000000094        0x0 build/firmware.o
+ .text          0x0000000000000094       0xa0 build/print.o
+                0x0000000000000094                print_chr
+                0x00000000000000a0                print_str
+                0x00000000000000c0                print_dec
+                0x00000000000000f0                print_hex
+ .text          0x0000000000000134        0x0 build/start.o
+ *(*)
+ .data          0x0000000000000134        0x0 build/firmware.o
+ .bss           0x0000000000000134        0x0 build/firmware.o
+ .rodata.str1.4
+                0x0000000000000134       0x10 build/firmware.o
+ .text.startup  0x0000000000000144       0x20 build/firmware.o
+                0x0000000000000144                main
+ .comment       0x0000000000000164       0x2e build/firmware.o
+                                         0x2f (size before relaxing)
+ .riscv.attributes
+                0x0000000000000192       0x1c build/firmware.o
+ .data          0x00000000000001ae        0x0 build/print.o
+ .bss           0x00000000000001ae        0x0 build/print.o
+ *fill*         0x00000000000001ae        0x2 
+ .rodata.str1.4
+                0x00000000000001b0       0x11 build/print.o
+ .comment       0x00000000000001c1       0x2f build/print.o
+ .riscv.attributes
+                0x00000000000001c1       0x1c build/print.o
+ .data          0x00000000000001dd        0x0 build/start.o
+ .bss           0x00000000000001dd        0x0 build/start.o
+ .riscv.attributes
+                0x00000000000001dd       0x1a build/start.o
+                0x00000000000001f8                . = ALIGN (0x4)
+ *fill*         0x00000000000001f7        0x1 
+                0x00000000000001f8                end = .
+LOAD /home/omar/lowrisc-toolchain-rv32imcb-20220524-1/bin/../lib/gcc/riscv32-unknown-elf/10.2.0/libgcc.a
+OUTPUT(firmware.elf elf32-littleriscv)
