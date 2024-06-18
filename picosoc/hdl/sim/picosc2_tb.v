@@ -1,11 +1,11 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Omar Chadib
+// Company: 
+// Engineer: 
 // 
-// 
-// Create Date: 05/31/2024 11:03:40 AM
+// Create Date: 06/04/2024 02:30:45 PM
 // Design Name: 
-// Module Name: picosoc_tb
+// Module Name: picosc2_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module picosoc_tb;
+module picosoc2_tb;
 
     // Clock and Reset Signals
     reg clk;
@@ -43,6 +43,23 @@ module picosoc_tb;
     wire ser_tx;
     reg  ser_rx;
 
+    // Flash Signals (Sorties)
+    wire flash_csb;
+    wire flash_clk;
+    wire flash_io0_oe;
+    wire flash_io1_oe;
+    wire flash_io2_oe;
+    wire flash_io3_oe;
+    wire flash_io0_do;
+    wire flash_io1_do;
+    wire flash_io2_do;
+    wire flash_io3_do;
+    // Flash Signals (Entrées)
+    reg flash_io0_di;
+    reg flash_io1_di;
+    reg flash_io2_di;
+    reg flash_io3_di;
+
     // Instantiate the Unit Under Test (UUT)
     picosoc uut (
         .clk(clk),
@@ -57,7 +74,21 @@ module picosoc_tb;
         .irq_6(irq_6),
         .irq_7(irq_7),
         .ser_tx(ser_tx),
-        .ser_rx(ser_rx)
+        .ser_rx(ser_rx),
+        .flash_csb(flash_csb),
+        .flash_clk(flash_clk),
+        .flash_io0_oe(flash_io0_oe),
+        .flash_io1_oe(flash_io1_oe),
+        .flash_io2_oe(flash_io2_oe),
+        .flash_io3_oe(flash_io3_oe),
+        .flash_io0_do(flash_io0_do),
+        .flash_io1_do(flash_io1_do),
+        .flash_io2_do(flash_io2_do),
+        .flash_io3_do(flash_io3_do),
+        .flash_io0_di(flash_io0_di),
+        .flash_io1_di(flash_io1_di),
+        .flash_io2_di(flash_io2_di),
+        .flash_io3_di(flash_io3_di)
     );
 
     // Clock Generation
@@ -77,6 +108,8 @@ module picosoc_tb;
         irq_7 = 0;
         ser_rx = 0;
 
+   
+
         // Wait for global reset to finish
         #100;
         resetn = 1;
@@ -89,12 +122,10 @@ module picosoc_tb;
 
         #100;
         iomem_ready = 1;
-        iomem_rdata = 32'hDEADBEEF;
+        
 
         #100;
         iomem_ready = 0;
-
-        
     end
 
     // Monitor

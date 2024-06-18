@@ -33,7 +33,24 @@ module picosoc (
 	input  irq_7,
 
 	output ser_tx,
-	input  ser_rx
+	input  ser_rx,
+	output flash_csb,
+	output flash_clk,
+
+	output flash_io0_oe,
+	output flash_io1_oe,
+	output flash_io2_oe,
+	output flash_io3_oe,
+
+	output flash_io0_do,
+	output flash_io1_do,
+	output flash_io2_do,
+	output flash_io3_do,
+
+	input  flash_io0_di,
+	input  flash_io1_di,
+	input  flash_io2_di,
+	input  flash_io3_di
 
 );
 	parameter [0:0] BARREL_SHIFTER = 1;
@@ -70,29 +87,33 @@ module picosoc (
 	wire [3:0] mem_wstrb;
 	wire [31:0] mem_rdata;
 
+	wire spimem_ready;
+	wire [31:0] spimem_rdata;
+
 	reg ram_ready;
 	wire [31:0] ram_rdata;
 
-	assign iomem_valid = mem_valid && (mem_addr[31:24] > 8'h 02);
+	assign iomem_valid = mem_valid && (mem_addr[31:24] > 8'h 01);
 	assign iomem_wstrb = mem_wstrb;
 	assign iomem_addr = mem_addr;
 	assign iomem_wdata = mem_wdata;
 
+	wire spimemio_cfgreg_sel = mem_valid && (mem_addr == 32'h 0200_0000);
+	wire [31:0] spimemio_cfgreg_do;
 
 	wire        simpleuart_reg_div_sel = mem_valid && (mem_addr == 32'h 0200_0004);
 	wire [31:0] simpleuart_reg_div_do;
 
-	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr == 32'h 0200_0008);
+	wire        simpleuart_reg_dat_sel = mem_valid && (mem_addr == 32'h 1000_0000);
 	wire [31:0] simpleuart_reg_dat_do;
 	wire        simpleuart_reg_dat_wait;
 
-	assign mem_ready = (iomem_valid && iomem_ready) || ram_ready ||
+	assign mem_ready = (iomem_valid && iomem_ready) || spimem_ready || ram_ready || spimemio_cfgreg_sel ||
 			simpleuart_reg_div_sel || (simpleuart_reg_dat_sel && !simpleuart_reg_dat_wait);
 
-	assign mem_rdata = (iomem_valid && iomem_ready) ? iomem_rdata : ram_ready ? ram_rdata :
-			simpleuart_reg_div_sel ? simpleuart_reg_div_do :
+	assign mem_rdata = (iomem_valid && iomem_ready) ? iomem_rdata : spimem_ready ? spimem_rdata : ram_ready ? ram_rdata :
+			spimemio_cfgreg_sel ? spimemio_cfgreg_do : simpleuart_reg_div_sel ? simpleuart_reg_div_do :
 			simpleuart_reg_dat_sel ? simpleuart_reg_dat_do : 32'h 0000_0000;
-
 	picorv32 #(
 	        .COMPRESSED_ISA(0),
         	.ENABLE_MUL(0),
@@ -109,6 +130,38 @@ module picosoc (
 		.mem_rdata   (mem_rdata  ),
 		.irq         (irq        )
 	);
+	
+		spimemio spimemio (
+		.clk    (clk),
+		.resetn (resetn),
+		.valid  (mem_valid && mem_addr >= 4*MEM_WORDS && mem_addr < 32'h 0200_0000),
+		.ready  (spimem_ready),
+		.addr   (mem_addr[23:0]),
+		.rdata  (spimem_rdata),
+
+		.flash_csb    (flash_csb   ),
+		.flash_clk    (flash_clk   ),
+
+		.flash_io0_oe (flash_io0_oe),
+		.flash_io1_oe (flash_io1_oe),
+		.flash_io2_oe (flash_io2_oe),
+		.flash_io3_oe (flash_io3_oe),
+
+		.flash_io0_do (flash_io0_do),
+		.flash_io1_do (flash_io1_do),
+		.flash_io2_do (flash_io2_do),
+		.flash_io3_do (flash_io3_do),
+
+		.flash_io0_di (flash_io0_di),
+		.flash_io1_di (flash_io1_di),
+		.flash_io2_di (flash_io2_di),
+		.flash_io3_di (flash_io3_di),
+
+		.cfgreg_we(spimemio_cfgreg_sel ? mem_wstrb : 4'b 0000),
+		.cfgreg_di(mem_wdata),
+		.cfgreg_do(spimemio_cfgreg_do)
+	);
+
 
 	simpleuart #(
 	.DEFAULT_DIV(12)
@@ -135,7 +188,24 @@ module picosoc (
 	always @(posedge clk)
 		ram_ready <= mem_valid && !mem_ready ;
 
-	picosoc_mem #(.WORDS(MEM_WORDS)) memory (
+//	picorv32_mem_model#(
+//             .G_DATA_WIDTH(32), 
+//            .FNAME_HEX( "C:\\Users\\pn327\\Downloads\\firmware.hex"),
+//            .FNAME_OUT("C:\\Users\\pn327\\Downloads\\firmware.out")
+//        ) mem(
+//	   .clock(clk),
+//	   .resetn(resetn),
+//	   .mem_valid(mem_valid),
+//	   .mem_instr(mem_instr),
+//	   .mem_addr(mem_addr),
+//	   .mem_wdata(mem_wdata),
+//	   .mem_wstrb(mem_wstrb),
+//	   .mem_ready(mem_ready),
+//	   .mem_rdata(mem_rdata)
+//	   );
+	   
+
+picosoc_mem #(.WORDS(MEM_WORDS)) memory (
 		.clk(clk),
 		.wen((mem_valid && !mem_ready && mem_addr < 4*MEM_WORDS) ? mem_wstrb : 4'b0),
 		.addr(mem_addr[23:2]),
@@ -155,7 +225,7 @@ module picosoc_mem #(
 );
 	reg [31:0] mem [0:WORDS-1];
 
-	initial $readmemh("C:\\Users\\pn327\\Downloads\\meeting.hex", mem);
+	initial $readmemh("C:\\Users\\Omar Chadib\\Downloads\\meeting.hex", mem);
 	always @(posedge clk) begin
 		rdata <= mem[addr];
 		if (wen[0]) mem[addr][ 7: 0] <= wdata[ 7: 0];
@@ -164,3 +234,6 @@ module picosoc_mem #(
 		if (wen[3]) mem[addr][31:24] <= wdata[31:24];
 	end
 endmodule
+
+//C:\\Users\\pn327\\Downloads\\meeting.hex
+//"C:\\Users\\pn327\\Downloads\\firmware.hex"
