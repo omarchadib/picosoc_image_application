@@ -27,4 +27,6 @@ Approximate computing involves sacrificing computational accuracy for gains in s
 
 [picosoc](https://github.com/omarchadib/picosoc_image_application/tree/main/picosoc) : simulates the system on chip (cpu,memory,uart) 
 
+[vga_controller](https://github.com/omarchadib/picosoc_image_application/tree/main/vga_controller) : VGA module to monitor image output
+
 [tools](https://github.com/omarchadib/picosoc_image_application/tree/main/tools) : some tools for compilation
